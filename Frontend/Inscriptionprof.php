@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!DOCTYPE html>
- <html lang="en">
+ <html lang="fr">
  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  </head>
  <body>
     <header>
-        <div class="brand">📚EduNotes</div>
+        <div class="brand">EduNotes</div>
         <div class="nav-actions">
             <a href="Interfaceprof.php">Entrer</a>
         </div>

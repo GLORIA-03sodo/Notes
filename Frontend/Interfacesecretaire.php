@@ -39,7 +39,7 @@ try {
 <body>
 <header>
     <nav>
-        <h1>📚 EduNotes</h1>
+        <h1>EduNotes</h1>
         <button class="btn-connexion" onclick="window.location.href='Accueil.php'">Retour</button>
     </nav>
 </header>

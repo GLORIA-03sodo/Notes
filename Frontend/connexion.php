@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../Frontend/InterfaceEtudiant.php");
         exit();
     } elseif ($user) { // Email trouvé mais mauvais mot de passe
-        header("Location: InscriptionEtudiant.php");
+        header("Location: InterfaceEtudiant.php");
         exit();
     }
 
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
      <!-- Header -->
     <header>
-        <h1>📚 EduNotes</h1>
+        <h1>EduNotes</h1>
         <button class="btn-connexion" onclick="window.location.href='Accueil.php'">Retour</button>
     </header>
     

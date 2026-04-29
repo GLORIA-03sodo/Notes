@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <header>
-        <h1>📚 EduNotes</h1>
+        <div class="brand">EduNotes</div>
         <button class="btn-connexion" onclick="window.location.href='Accueil.php'">Retour</button>
     </header>
 

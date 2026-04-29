@@ -9,7 +9,7 @@
 <body>
     <!-- Header -->
     <header>
-        <h1>📚 EduNotes</h1>
+        <h1>EduNotes</h1>
         <button class="btn-retour" onclick="window.location.href='index.php'">Retour</button>
     </header>
     
