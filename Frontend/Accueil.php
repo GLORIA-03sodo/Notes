@@ -3,56 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes - Accueil</title>
+    <title>EduNotes - Portail</title>
     <link rel="stylesheet" href="Accueil.css">
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <h1>EduNotes</h1>
-        <button class="btn-retour" onclick="window.location.href='index.php'">Retour</button>
+    <header class="main-header">
+        <div class="logo">EduNotes</div>
+        <button class="btn-retour" onclick="window.location.href='index.php'">
+            Retour
+        </button>
     </header>
     
-    <!-- Main Content -->
-    <main>
-        <h1>Bienvenue sur la plateforme Notes</h1>
-        <br>
-        <strong><p>Sélectionnez votre profil pour accéder à votre espace</p></strong>
+    <main class="hero-container">
+        <section class="intro">
+            <h1>Bienvenue sur la plateforme Notes</h1>
+            <p>Sélectionnez votre profil pour accéder à votre espace de travail sécurisé.</p>
+        </section>
         
-        <!-- 3 Sections -->
-        <div class="sections-container">
-            <!-- Section Étudiant -->
+        <div class="sections-grid">
             <div class="section-card">
-                <div class="section-icon">👨‍🎓</div>
-                <h3>Espace Étudiant</h3>
-                <p>Consultez vos notes et suivez votre progression académique</p>
-                  <a href="connexion.php"><button class="section-btn" onclick="rediriger('etudiant')">Accéder</button></a>
+                <div class="card-content">
+                    <div class="icon-wrapper">👨‍🎓</div>
+                    <h3>Espace Étudiant</h3>
+                    <p>Consultez vos notes et suivez votre progression académique en temps réel.</p>
+                </div>
+                <a href="connexion.php" class="action-link">
+                    <button class="section-btn" onclick="rediriger('etudiant')">Accéder à l'espace</button>
+                </a>
             </div>
             
-            <!-- Section Professeur -->
             <div class="section-card">
-                <div class="section-icon">👨‍🏫</div>
-                <h3>Espace Professeur</h3>
-                <p>Gérez les notes de vos étudiants facilement</p>
-                  <a href="connexion.php"><button class="section-btn" onclick="rediriger('professeur')">Accéder</button></a>
+                <div class="card-content">
+                    <div class="icon-wrapper">👨‍🏫</div>
+                    <h3>Espace Professeur</h3>
+                    <p>Gérez les évaluations, saisissez les notes et communiquez avec vos classes.</p>
+                </div>
+                <a href="connexion.php" class="action-link">
+                    <button class="section-btn" onclick="rediriger('professeur')">Accéder à l'espace</button>
+                </a>
             </div>
             
-            <!-- Section Administration -->
             <div class="section-card">
-                <div class="section-icon">👔</div>
-                <h3>Espace Administration</h3>
-                <p>Administrez la plateforme et les utilisateurs</p>
-                  <a href="connexion.php"><button class="section-btn" onclick="rediriger('administration')">Accéder</button></a>
+                <div class="card-content">
+                    <div class="icon-wrapper">👔</div>
+                    <h3>Administration</h3>
+                    <p>Contrôle global, gestion des utilisateurs et configuration du système.</p>
+                </div>
+                <a href="connexion.php" class="action-link">
+                    <button class="section-btn" onclick="rediriger('administration')">Accéder à l'espace</button>
+                </a>
             </div>
         </div>
     </main>
     
-  
-    <!-- Footer -->
-    <footer>
-        <p>@ 2026 - Gestion des notes - Consultation des notes</p>
-    
+    <footer class="main-footer">
+        <p>&copy; 2026 EduNotes — Système de gestion académique</p>
     </footer>
-    
 </body>
 </html>
