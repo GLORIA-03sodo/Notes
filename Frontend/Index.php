@@ -14,7 +14,7 @@
     <header>
         <div class="brand">EduNotes</div>
         <nav class="nav-actions">
-            <a href="Accueil.php" class="btn-connexion">Connexion</a>
+            <a href="connexion.php" class="btn-connexion">Connexion</a>
         </nav>
     </header>
 

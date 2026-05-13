@@ -64,8 +64,8 @@ $etudiants = $pdo->query("SELECT * FROM etudiant")->fetchAll();
 <body>
       <header>
     <nav>
-           <h1>📚 EduNotes</h1>
-        <button class="btn-connexion" onclick="window.location.href='Accueil.php'">Retour</button>
+           <h1>EduNotes</h1>
+        <button class="btn-connexion" onclick="window.location.href='connexion.php'">Retour</button>
     </nav>
 </header>
  <div class="left-container">

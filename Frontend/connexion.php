@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      <!-- Header -->
     <header>
         <h1>EduNotes</h1>
-        <button class="btn-connexion" onclick="window.location.href='Accueil.php'">Retour</button>
+        <button class="btn-connexion" onclick="window.location.href='index.php'">Retour</button>
     </header>
     
     <!-- Main Content -->
@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="submit" class="btn-submit">Se connecter</button>
             </form>
             <div class="forgot-password">
-         <p>Mot de passe oublié? veuillez vous inscrire </p>
+         <a href="forgot-password.php">Mot de passe oublié ?</a>
             
                 
             </div>

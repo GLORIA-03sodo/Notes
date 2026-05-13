@@ -1,8 +1,8 @@
- <?php
+<?php
 session_start();
 require_once '../Backend/db.php';
 
-// 1. SÉCURITÉ : Vérifier si c'est bien un professeur
+// 1. SÉCURITÉ
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'professeur') {
     header("Location: connexion.php");
     exit();
@@ -15,7 +15,7 @@ $filiere_selectionnee = $_POST['filiere'] ?? '';
 $matiere_selectionnee = $_POST['matiere'] ?? '';
 
 try {
-    // A. Charger les filières du professeur
+    // A. Charger les filières
     $queryFil = $pdo->prepare("SELECT DISTINCT f.Code_fi, f.libelle_fi 
                                FROM filieres f 
                                JOIN matiere m ON f.Code_fi = m.Code_fi 
@@ -23,7 +23,7 @@ try {
     $queryFil->execute([$id_prof]);
     $filieres = $queryFil->fetchAll();
 
-    // B. Charger les matières selon la filière
+    // B. Charger les matières
     $matieres = [];
     if ($filiere_selectionnee) {
         $queryMat = $pdo->prepare("SELECT id_matiere, noml_matiere FROM matiere 
@@ -32,49 +32,45 @@ try {
         $matieres = $queryMat->fetchAll();
     }
 
-    // C. Charger les étudiants et leurs notes
-    if (isset($_POST['charger']) && $filiere_selectionnee && $matiere_selectionnee) {
-        $sql = "SELECT e.id_etud, e.nom, e.prenom, e.email, n.note 
-                FROM etudiant e 
-                LEFT JOIN note n ON e.id_etud = n.id_etud AND n.id_matiere = ?
-                WHERE e.Code_fi = ?";
-        $queryEtud = $pdo->prepare($sql);
-        $queryEtud->execute([$matiere_selectionnee, $filiere_selectionnee]);
-        $etudiants = $queryEtud->fetchAll();
-    }
-
-    // D. TRAITEMENT : AJOUT / MODIFICATION / SUPPRESSION
+    // D. TRAITEMENT : ENREGISTREMENT
     if (isset($_POST['enregistrer'])) {
         $id_mat = $_POST['matiere_hidden'];
-        $notes_saisies = $_POST['notes']; 
+        $notes_saisies = $_POST['notes'] ?? [];
 
-        $pdo->beginTransaction();
-        
-        // Préparation des requêtes
-        $stmtSave = $pdo->prepare("INSERT INTO note (id_etud, id_matiere, note) VALUES (?, ?, ?) 
-                                   ON DUPLICATE KEY UPDATE note = VALUES(note)");
-        $stmtDelete = $pdo->prepare("DELETE FROM note WHERE id_etud = ? AND id_matiere = ?");
-        
-        foreach ($notes_saisies as $id_etud => $valeur_note) {
-            if ($valeur_note !== "" && $valeur_note !== null) {
-                // Si une valeur est saisie -> On ajoute ou on modifie
-                $stmtSave->execute([$id_etud, $id_mat, $valeur_note]);
-            } else {
-                // suppression de la note si le champs est vide
-                $stmtDelete->execute([$id_etud, $id_mat]);
+        if (!empty($id_mat)) {
+            $pdo->beginTransaction();
+            
+            // ON DUPLICATE KEY UPDATE ne fonctionne QUE si (id_etud, id_matiere) est UNIQUE
+            $stmtSave = $pdo->prepare("INSERT INTO note (id_etud, id_matiere, note) VALUES (?, ?, ?) 
+                                       ON DUPLICATE KEY UPDATE note = VALUES(note)");
+            $stmtDelete = $pdo->prepare("DELETE FROM note WHERE id_etud = ? AND id_matiere = ?");
+            
+            foreach ($notes_saisies as $id_etud => $valeur_note) {
+                if ($valeur_note !== "" && $valeur_note !== null) {
+                    $stmtSave->execute([$id_etud, $id_mat, $valeur_note]);
+                } else {
+                    $stmtDelete->execute([$id_etud, $id_mat]);
+                }
             }
+            
+            $pdo->commit();
+            $message = "<div class='success-message'>Mise à jour effectuée avec succès.</div>";
+            
+            // On force les variables pour le rechargement de la liste
+            $matiere_selectionnee = $id_mat;
+            $filiere_selectionnee = $_POST['filiere_hidden'];
         }
-        
-        $pdo->commit();
-        $message = "<div class='success-message'> Mise à jour effectuée (Notes enregistrées et/ou supprimées).</div>";
-        
-        // Recharger la liste après enregistrement pour voir les changements
+    }
+
+    // C. CHARGEMENT DE LA LISTE (Indépendant pour être appelé après un POST ou un chargement simple)
+    if (($filiere_selectionnee && $matiere_selectionnee)) {
         $sql = "SELECT e.id_etud, e.nom, e.prenom, e.email, n.note 
                 FROM etudiant e 
                 LEFT JOIN note n ON e.id_etud = n.id_etud AND n.id_matiere = ?
-                WHERE e.Code_fi = ?";
+                WHERE e.Code_fi = ?
+                ORDER BY e.nom ASC";
         $queryEtud = $pdo->prepare($sql);
-        $queryEtud->execute([$id_mat, $_POST['filiere_hidden']]);
+        $queryEtud->execute([$matiere_selectionnee, $filiere_selectionnee]);
         $etudiants = $queryEtud->fetchAll();
     }
 
@@ -95,10 +91,10 @@ try {
 </head>
 <body>
     <div class="container">
-        <a href="logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Quitter</a>
+        <a href="connexion.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Quitter</a>
         
         <div class="header">
-            <h1>📊 Gestion des Notes</h1>
+            <h1>Gestion des Notes</h1>
             <p>Professeur : <strong><?= htmlspecialchars($_SESSION['nom']) ?></strong></p>
         </div>
 
@@ -109,7 +105,7 @@ try {
                 <div class="filter-group">
                     <label>Filière :</label>
                     <select name="filiere" onchange="document.getElementById('filterForm').submit()">
-                        <option value="">-- Sélectionner une filière --</option>
+                        <option value="">Sélectionner une filière --</option>
                         <?php foreach ($filieres as $f): ?>
                             <option value="<?= $f['Code_fi'] ?>" <?= ($filiere_selectionnee == $f['Code_fi']) ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($f['libelle_fi']) ?>
@@ -121,7 +117,7 @@ try {
                 <div class="filter-group">
                     <label>Matière :</label>
                     <select name="matiere">
-                        <option value="">-- Choisir la matière --</option>
+                        <option value="">Choisir la matière --</option>
                         <?php foreach ($matieres as $m): ?>
                             <option value="<?= $m['id_matiere'] ?>" <?= ($matiere_selectionnee == $m['id_matiere']) ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($m['noml_matiere']) ?>
